@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/login.css') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>  
+        <!-- <link rel= "stylesheet" href="{{ url_for('static', filename='videos/UCSP.mp4') }}"> -->
+        <title>Reservar Aula UCSP</title>
+    </head>
+    <body>
+
+
+        <video poster="https://encuentro.pe/wp-content/uploads/2019/10/san-pablo-top-ten-ranking.jpg" autoplay muted loop>
+            <source src="https://ucsp.edu.pe/wp-content/uploads/2020/10/video-presentacion-ucsp.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+          
+
+        <div id="mainbox">
+
+            <h2 class = "item" >Ingresa</h2>
+
+            <div id = "frm">
+
+                <div class = "item" >
+                    <label for="mail">Correo Electrónico:</label>
+                    <input id = "mail" name = "mail" type="text" placeholder="Correo Electrónico" required>
+                </div>
+
+                <div class = "item" >
+                    <label for="code">Código de Alumno:</label>
+                    <input id = "code" name = "code" placeholder="Código" required>
+                </div>
+
+                <div class = "item" id = "sub" type="button" >
+                    <button id = "submit">Ingresar</button>
+                </div>
+
+            </div id = "frm">
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script>
+        
+    
+            function send_query(){
+    
+                data_query = {
+                    mail : document.getElementById("mail").value ,
+                    code : document.getElementById("code").value ,
+                };
+                
+                console.log(data_query);
+    
+                $.ajax({
+                    url: "/request_login",
+                    method: "POST",
+                    data: data_query
+                }).done(function (data) {
+
+                    console.log(data == data['data']);
+                    // console.log(data['data']);
+                    if (data['data'] == 0) {
+                        console.log("NO");
+                        alert("Datos no coinciden o no existen")
+                        return;
+                    }
+                    else{
+                        // Create a form element
+                        var form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = "{{ url_for('options') }}";
+
+                        // data_query = {
+                        //     mail : document.getElementById("mail").innerHTML,
+                        //     code : document.getElementById("code").innerHTML
+                        // };
+
+                        for (var key in data_query) {
+                            var input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = key;
+                            input.value = data_query[key];
+                            form.appendChild(input);
+                        }
+
+                        // Add the form to the document and submit it
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+
+                }).fail(function (error) {
+                    alert("Error :(");
+                });
+            }
+
+            var btn = document.getElementById("sub");
+            btn.addEventListener("click", send_query);
+
+        </script>
+
+    </body>
+    
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/reservar.css') }}">
+        <title>Reservar Aula UCSP</title>
+    </head>
+    <body>
+
+        <p id="email" style="display: none;">{{email}}</p>
+
+        <div id="filters_container">
+
+            <h2 class = "item" >RESERVAR</h2>
+
+            <h4 class = "item" >Ingresa los detalles requeridos para el aula</h2>
+
+            <div id = "filters">
+
+                <div class = "item" >
+                    <label for = "asientos">Número de asientos:</label>
+                    <input id = "asientos" type="number" placeholder="Asientos">
+                </div>
+
+                <div class = "item" >
+                    <label for = "date">Fecha:</label>
+                    <input id = "date" type="datetime-local">
+                </div>
+
+                <div class = "item">
+                    <label for = "minutos" class = limit_width>Duración:</label>
+                    <input id = "minutos" type="number" placeholder="Minutos">
+                </div>
+
+                <div class = "item" >
+                    <button id = "sub">Buscar</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="results">
+            <h1>Resultados:</h1>
+            <div style="display: grid; place-items: center;">
+                <table id="results_table" style="text-align: left;">
+                    <tr>
+                        <th>Salón</th>
+                        <th>Asientos</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script>
+
+            document.getElementById("results").style.display = "none";
+            
+
+            document.getElementById("asientos").value = 5;
+            document.getElementById("minutos").value = 15;
+
+            var now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            document.getElementById('date').value = now.toISOString().slice(0,16);
+            console.log(now.toISOString().slice(0,16));
+
+            function checkData(data){
+
+                console.log(data);
+                console.log(typeof(data['date']));
+
+                // CHAIRS 
+
+                if (data['asientos'].includes("-")){
+                    alert("Asientos deben estar entre 0 y 60.");
+                    return false;
+                }
+
+                if (data['asientos'].includes(".")){
+                    alert("Asientos no pueden ser decimales.");
+                    return false;
+                }
+
+                let chairs = parseInt(data['asientos']);
+                if (chairs > 60){
+                    alert("Asientos deben estar entre 0 y 60.");
+                    return false;
+                }
+
+                // Duration
+                if (data['minutos'].includes("-")){
+                    alert("Duración deben estar entre 15 y 120 minutos.");
+                    return false;
+                }
+
+                if (data['minutos'].includes(".")){
+                    alert("Duración no pueden ser decimal.");
+                    return false;
+                }
+
+                let duration = parseInt(data['minutos']);
+                if (duration > 120 || duration < 15){
+                    alert("Duración deben estar entre 15 y 120 minutos.");
+                    return false;
+                }
+                
+                // Date
+                let currentDate = new Date();
+                currentDate.setSeconds(0,0);
+
+                const insertedDate = new Date(data['date']);
+                const finishTime = new Date(insertedDate.getTime() + duration*60000);
+
+                if (currentDate > insertedDate) {
+                    alert("La fecha y hora debe ser mayor a la actual.");
+                    return false;
+                }
+
+                let limitTime = new Date(data['date']);
+                limitTime.setHours(21);
+                limitTime.setMinutes(15);
+
+
+                let startingTime = new Date(data['date']);
+                startingTime.setHours(7);
+                startingTime.setMinutes(0);
+
+
+                if (insertedDate < startingTime){
+                    alert("Las reservas no pueden empezar antes de las 7:00 am.");
+                    return false;
+                }
+                if (limitTime < finishTime){
+                    alert("Las reservas no pueden terminar despues de las 9:15 pm.");
+                    return false;
+                }
+
+                return true;
+            }
+
+            function send_query(){
+
+                var node = document.getElementById('results_table').children[0];
+                while (node.childNodes.length > 2) {
+                    node.removeChild(node.lastChild);
+                }
+    
+                data_query = {
+                    asientos : document.getElementById("asientos").value,
+                    date : document.getElementById("date").value,
+                    minutos : document.getElementById("minutos").value,
+                };
+
+                console.log(data_query);
+                console.log(data_query["asientos"]);
+
+                if (!checkData(data_query)) return;
+
+                $.ajax({
+                    url: "/request_book",
+                    method: "POST",
+                    data: data_query
+                }).done(function (data) {
+
+                    if (data['data'].length == 0) {
+                        console.log("NO HAY DISPONIBLES");
+                        return;
+                    }
+                    else{
+
+                        document.getElementById("results").style.display = "block";
+
+                        data = data['data'];
+                        let but;
+                        let table = document.getElementById("results_table"), row, cell;
+                        for (let i = 0; i < data.length; ++i){
+                            row = table.insertRow(i+1);
+                            row.insertCell(0).innerHTML = data[i][0];
+                            row.insertCell(1).innerHTML = data[i][1];
+                            row.insertCell(2).innerHTML = "<button onclick = book('"+data[i][0]+"') id = "+ data[i][0] +">Reservar</button>";
+                        }
+                    }
+
+                }).fail(function (error) {
+                    alert("Error :(");
+                    let form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = "{{ url_for('reservar') }}";
+
+                    // data_query = {
+                    //     mail : document.getElementById("mail").innerHTML,
+                    //     code : document.getElementById("code").innerHTML
+                    // };
+
+                    // for (var key in data_query) {
+                    //     var input = document.createElement('input');
+                    //     input.type = 'hidden';
+                    //     input.name = key;
+                    //     input.value = data_query[key];
+                    //     form.appendChild(input);
+                    // }
+
+                    // Add the form to the document and submit it
+                    document.body.appendChild(form);
+                    form.submit();
+                    
+                });
+            }
+
+            var btn = document.getElementById("sub");
+            btn.addEventListener("click", send_query);
+
+            function book(class_code){
+                let input;
+                let form = document.createElement('form');
+                form.method = 'POST';
+                form.action = "{{ url_for('confirmar_reserva') }}";
+
+                let keys = ["asientos", "date","minutos"];
+
+                for (let i = 0; i < 3; ++i){
+                    input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = keys[i];
+                    input.value = document.getElementById(keys[i]).value;
+                    form.appendChild(input);
+                }
+                
+                // email
+                input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'email';
+
+                console.log(document.getElementById('email'));
+                console.log(document.getElementById('email').innerHTML);
+
+                input.value = document.getElementById('email').innerHTML;
+                form.appendChild(input);
+
+
+                input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'class_code';
+                input.value = class_code;
+                form.appendChild(input);
+
+
+                input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'student_code';
+                input.value = "{{student_code}}";
+                form.appendChild(input);
+
+                document.body.appendChild(form);
+                form.submit();
+                
+            }
+
+        </script>
+
+    </body>
+    
+</html>

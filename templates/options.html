@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/options.css') }}">
+        <title>Reservar Aula UCSP</title>
+    </head>
+    <body>
+
+        <div id="mainbox">
+            <h2 class = "item" >Elige una opción</h2>
+
+            <p class = "item" >Correo: {{ mail }}</p>
+            <p class = "item" >Código: {{ code }}</p>
+            
+            <div class = "item" >
+                <form action = "{{ url_for('reservar') }}" method = "post">
+                    <input name = "mail" style="display: none;" value="{{mail}}">
+                    <input name = "code" style="display: none;" value="{{code}}">
+                    <button id = "submit">Reservar</button>
+                </form>
+            </div>
+
+            <div class = "item" >
+                <form action = "{{ url_for('avisar') }}" method = "post">
+                    <input name = "mail" style="display: none;" value="{{mail}}">
+                    <input name = "code" style="display: none;" value="{{code}}">
+                    <button id = "submit">Avisar</button>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            
+            // const ALLOWED_CHARS_REGEXP = /[a-z]+/;
+            // const ALLOWED_NUM_REGEXP = /[0-9]+/;
+            // const ALLOWED_UPPER_CHARS_REGEXP = /[A-Z]+/;
+
+            // document.getElementById("word").addEventListener("keydown", event => {
+            // if (!ALLOWED_CHARS_REGEXP.test(event.key) && 
+            //     !ALLOWED_NUM_REGEXP.test(event.key) &&
+            //     !ALLOWED_UPPER_CHARS_REGEXP.test(event.key)) {
+            //     event.preventDefault();
+            // }
+            // });
+
+            // function search_occurrences(){
+            //     let query = document.getElementById("word").value.toLowerCase();
+            //     if (query.length === 0) return;
+            //     window.location.assign(window.location.origin + "/search/occurrences/" + query);
+            // };
+
+            // function search_cos_sim(){
+            //     let query = document.getElementById("word").value.toLowerCase();
+            //     if (query.length === 0) return;
+            //     window.location.assign(window.location.origin + "/search/cosine_sim/" + query);
+            // };
+
+        </script>
+
+    </body>
+    
+</html>

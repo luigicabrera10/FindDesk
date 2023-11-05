@@ -1,0 +1,79 @@
+body{
+    background-color: beige;
+    margin: 0px;
+    background-image: url("https://encuentro.pe/wp-content/uploads/2019/10/san-pablo-top-ten-ranking.jpg");
+    background-size: cover;
+
+    height: 100vh;
+    width: 100vw;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+
+}
+
+
+h2{
+    font-family: Verdana;
+    font-size: 30px;
+}
+
+#mainbox{
+    background-color: whitesmoke;
+    border-radius: 10px;
+    padding: 15px;
+    width: 30%;
+    padding-bottom: 25px;
+    box-shadow: 4px 4px 4px rgb(23, 23, 23);
+
+}
+
+.item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: Verdana;
+
+}
+
+input{
+    border-radius: 5px;
+    padding: 5px;
+}
+
+form{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+button{
+    background-color: #3b7c3ce0;
+    border-radius: 4px;
+    border-color: rgb(75, 75, 75);
+    color: white;
+    padding: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+
+    font-family: Verdana;
+    font-size: 20px;
+
+    margin: 10px;
+
+    margin-left: 10px;
+    margin-right: 10px;
+
+    width: 50%;
+
+}
+
+button:hover{
+    background-color: #3b7c3c;
+}
+

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/bookingConfirm.css') }}">
+        <title>Reservar Aula UCSP</title>
+    </head>
+    <body>
+
+        <div id="mainbox">
+
+            <h2 class = "item" >Detalles de Reserva:</h2>
+
+            <table id = "frm">
+
+                <tr>
+                    <td><b class="table_data">Correo: </b></td>
+                    <td class="table_data">{{email}}</td>
+                </tr>
+                
+                <tr>
+                    <td><b class="table_data">Salón: </b></td>
+                    <td class="table_data">{{class_code}}</td>
+                </tr>
+
+                <tr>
+                    <td><b class="table_data">Asientos: </b></td>
+                    <td class="table_data">{{chairs}}</td>
+                </tr>
+
+                <tr>
+                    <td><b class="table_data">Fecha: </b></td>
+                    <td class="table_data">{{date[2]}}/{{date[1]}}/{{date[0]}}</td>
+                </tr>
+
+                <tr>
+                    <td><b class="table_data">Hora: </b></td>
+                    <td class="table_data">{{date[3]}}:{{date[4]}}</td>
+                </tr>
+
+                <tr>
+                    <td><b class="table_data">Duración: </b></td>
+                    <td class="table_data">{{duration}} minutos</td>
+                </tr>
+
+            </table>
+
+            <div id="buttons_div">
+                <form action="{{ url_for('options') }}" method="post">
+                    <input name = "mail" style="display: none;" value = "{{email}}">
+                    <input name = "code" style="display: none;" value = "{{student_code}}">
+                    <button>Volver a Menú</button>
+                </form>
+                <form action="{{ url_for('login') }}">
+                    <button >Volver a Ingresar</button>
+                </form>
+            </div>
+            
+        </div>
+
+        <script
+        type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"
+        ></script>
+        <!-- <script src="https://smtpjs.com/v3/smtp.js"></script> -->
+        <script>
+
+
+            body = "Salón: {{class_code}}\n";
+            body += "Asientos: {{chairs}}\n";
+            body += "Fecha: {{date[2]}}/{{date[1]}}/{{date[0]}}\n";
+            body += "Hora:  {{date[3]}}:{{date[4]}}\n";
+            body += "Duración: {{duration}} minutos\n";
+
+
+            // Email.send({
+            //     Host : "smtp.elasticemail.com",
+            //     Username : "luigi.cabrera@ucsp.edu.pe",
+            //     Password : "4412181D917CACF51A28816232DB8CECF2D8",
+            //     To : 'luigi.cabrera.h@hotmail.com',
+            //     // To : '{{email}}',
+            //     From : "luigi.cabrera@ucsp.edu.pe",
+            //     Subject : "Confirmación de Reserva",
+            //     Body : body
+            // }).then(
+            //     // message => alert(message)
+            // );
+            
+            emailjs.init("73xCxS9-KO9awsKx9");
+            emailjs.send("service_j7p9m4q","template_g28zhxj",{
+                message: body,
+                to_email: '{{email}}',
+                // to_email: 'luigi.cabrera@ucsp.edu.pe',
+            }).then( function(res){
+                console.log("Success ", res.status);
+            });
+
+        </script>
+
+    </body>
+    
+</html>

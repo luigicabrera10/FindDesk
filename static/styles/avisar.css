@@ -1,0 +1,149 @@
+body{
+    background-color: beige;
+    margin: 0px;
+    background-image: url("https://encuentro.pe/wp-content/uploads/2019/10/san-pablo-top-ten-ranking.jpg");
+    background-size: cover;
+
+    /* height: 100vh;
+    width: 100vw; */
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    font-family: Verdana;
+
+}
+
+
+h2{
+    font-family: Verdana;
+    font-size: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+h4{
+    font-family: Verdana;
+    font-size: 22px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+}
+
+th{
+    font-size: 25px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-right: 10px;
+    /* padding-left: 10px; */
+}
+
+td{
+    font-size: 22px;
+}
+
+tr{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#filters_container{
+    background-color: whitesmoke;
+    border-radius: 10px;
+    padding: 15px;
+    width: 90%;
+
+    padding-bottom: 25px;
+
+    margin: 15px;
+
+    box-shadow: 4px 4px 4px rgb(23, 23, 23);
+
+}
+
+#filters{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around; 
+}
+
+#filters *{
+    display: flex;
+    flex-direction: column;
+}
+
+.item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: Verdana;
+    padding-left: 5px;
+    padding-right: 5px;
+
+
+}
+
+
+input, select{
+    border-radius: 5px;
+    padding: 5px;
+}
+
+#limit{
+    display: inline-flex;
+    flex-direction: row;
+    cursor:pointer;
+}
+
+#asientos, #minutos{
+    width: 100px;
+}
+
+#filters{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+#filters * {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    font-family: Verdana;
+    font-size: 18px;
+}
+
+
+button{
+    background-color: #3b7c3ce0;
+    border-radius: 4px;
+    border-color: rgb(75, 75, 75);
+    color: white;
+    padding: 8px;
+    padding-left: 19px;
+    padding-right: 19px;
+
+
+    margin-left: 10px;
+    margin-right: 10px;
+
+}
+
+button:hover{
+    background-color: #3b7c3c;
+    cursor:pointer;
+
+}
+
+#results{
+    background-color: whitesmoke;
+    padding: 15px;
+    padding-bottom: 25px;
+    padding-right: 25px;
+    padding-left: 25px;
+    border-radius: 10px;
+}
+
